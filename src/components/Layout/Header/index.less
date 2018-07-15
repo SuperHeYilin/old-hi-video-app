@@ -1,0 +1,108 @@
+@import "../../vars.less";
+
+.header {
+  :global .ant-menu-horizontal {
+    & > .ant-menu-submenu {
+      float: right;
+    }
+    border: none;
+    display: inline-block;
+  }
+  box-shadow: @shadow-2;
+  position: relative;
+  padding: 0 2px 0 0;
+  display: flex;
+  justify-content: space-between;
+  height: 60px;
+  line-height: 60px;
+  background: #2F4554;
+  color: white;
+
+  .logo {
+    text-align: center;
+    height: 47px;
+    line-height: 47px;
+    cursor: pointer;
+    transition: @transition-ease-out;
+    overflow: hidden;
+
+    img {
+      width: 145px;
+      height: 47px;
+      margin-right: 8px;
+      transition: @transition-ease-out;
+    }
+
+    span {
+      vertical-align: text-bottom;
+      font-size: 16px;
+      text-transform: uppercase;
+      display: inline-block;
+    }
+
+    .anticon {
+      transition: @transition-ease-out;
+    }
+  }
+  
+  .leftWarpper {
+    display: inline-flex;
+  }
+
+  .rightWarpper {
+    display: flex;
+    margin: auto 0px;
+  }
+
+  .button {
+    width: 50px;
+    height: 60px;
+    line-height: 60px;
+    text-align: center;
+    font-size: 30px;
+    cursor: pointer;
+    transition: @transition-ease-in;
+
+    &:hover {
+      background-color: fade(#eeeeee, 30%);
+    }
+
+    .badge {
+      color: white;
+    }
+  }
+}
+
+.user-menu {
+  z-index: 1050;
+  border-right: 0px;
+
+  li:hover {
+    background-color: fade(#f5f7f9, 50%) !important;
+  }
+
+  .submenu {
+    font-size: 16px;
+  }
+}
+
+.popovermenu {
+  width: 300px;
+  margin-left: 6px;
+
+  :global .ant-popover-inner-content {
+    padding: 0;
+
+    .ant-menu-inline .ant-menu-item,
+    .ant-menu-vertical .ant-menu-item {
+      border-right: 0;
+      height: 48px;
+      line-height: 48px;
+    }
+
+    .ant-menu-inline .ant-menu-item-selected,
+    .ant-menu-inline .ant-menu-selected {
+      border-right: 0;
+    }
+  }
+}

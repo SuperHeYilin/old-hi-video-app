@@ -1,0 +1,92 @@
+@import "../../vars.less";
+.menus {
+  background: #2F4554;
+  margin: auto;
+  text-align: center;
+  width: 698px;
+  border: 0;
+
+  :global {
+    .ant-menu-item {
+      padding: 0;
+    }
+  }
+
+  .card {
+    overflow: visible !important;
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.14);
+    padding: 5px 20px 0px 20px;
+    background: #2F4554;
+  }
+  .cardActive {
+    overflow: visible !important;
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.14);
+    padding: 5px 20px 0px 20px;
+    background: white;
+  }
+  .card:hover {
+    -moz-transform: scale(1.03);
+    -webkit-transform: scale(1.03);
+    -ms-transform: scale(1.03);
+    transform: scale(1.03);
+  }
+  .head {
+    border: 0px;
+    height: 100px;
+    line-height: 66px;
+    text-align: center;
+    // margin-bottom: -10px !important;
+    width: 100% !important;
+    .icon {
+      padding-left: 20px;
+      padding-right: 10px;
+      color: #FFFFFF;
+      border-radius: 3px;
+      position: relative;
+      // top: -30px;
+      display: inline-block;
+      /* float: left; */
+      text-align: center;
+      font-size: 26px;
+    }
+    .yellow {
+      background: linear-gradient(60deg, #ffa726, #fb8c00);
+      box-shadow: 0 4px 10px 0px rgba(0, 0, 0, 0.14), 0 7px 10px -5px rgba(255, 152, 0, 0.4);
+    }
+    .pink {
+      background: linear-gradient(60deg, #ec407a, #d81b60);
+      box-shadow: 0 4px 10px 0px rgba(0, 0, 0, 0.14), 0 7px 10px -5px rgba(233, 30, 99, 0.4);
+    }
+    .blue {
+      background: linear-gradient(60deg, #26c6da, #00acc1);
+      box-shadow: 0 4px 10px 0px rgba(0, 0, 0, 0.14), 0 7px 10px -5px rgba(0, 188, 212, 0.4);
+    }
+    .green {
+      background: linear-gradient(60deg, #66bb6a, #43a047);
+      box-shadow: 0 4px 10px 0px rgba(0, 0, 0, 0.14), 0 7px 10px -5px rgba(76, 175, 80, 0.4);
+    }
+    .pink2 {
+      background: linear-gradient(60deg, #FB7CAE, #FB7CAE);
+      box-shadow: 0 4px 10px 0px rgba(0, 0, 0, 0.14), 0 7px 10px -5px rgba(175, 76, 158, 0.4);
+    }
+    .purple {
+      background: linear-gradient(60deg, #9963E5, #9963E5);
+      box-shadow: 0 4px 10px 0px rgba(0, 0, 0, 0.14), 0 7px 10px -5px rgba(122, 76, 175, 0.4);
+    }
+    .fontColorActive {
+      color: black;
+      margin-top: 6px;
+      height: 26px;
+      line-height: 26px;
+      overflow: hidden;
+      font-weight: 200;
+    }
+    .fontColor {
+      color: white;
+      margin-top: 6px;
+      height: 26px;
+      line-height: 26px;
+      overflow: hidden;
+    }
+  }
+}

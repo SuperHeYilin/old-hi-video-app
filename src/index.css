@@ -1,0 +1,11 @@
+body {
+	height: auto;
+	min-height: 100%;
+}
+
+input:-webkit-autofill {  
+	-webkit-box-shadow: 0 0 0px 100px white inset !important;
+	outline:none;
+}
+
+input:required:invalid, input:focus:invalid, textarea:required:invalid, textarea:focus:invalid{box-shadow: none;}
