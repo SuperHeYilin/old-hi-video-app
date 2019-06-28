@@ -67,7 +67,7 @@ class LoginForm extends Component {
         <Background />
         <div className={styles['wrapper-panel']}>
           <Card bordered={false} 	>
-            <img alt="logo" src={require('../../public/imgs/logo/logo.png')} />
+            {/* <img alt="logo" src={require('../../public/imgs/logo/logo.png')} /> */}
             <Form>
               <Row gutter={24}>
                 <Col lg={24} md={24} sm={24} xs={24}>

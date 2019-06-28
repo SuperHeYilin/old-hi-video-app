@@ -15,6 +15,8 @@ export { default as ReturnTickets } from './module/ReturnTicket'
 export { default as VideoType } from './module/Type'
 // 导入视频文件
 export { default as InitFile } from './module/InitFile'
+//初始化配置
+export { default as InitSetting } from './module/InitSetting'
 
 /* 异步引入 */
 export const NotFound = dynamic({

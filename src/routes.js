@@ -13,6 +13,7 @@ import {
 	InitFile,
 	VideoType,
 	VideoDetail,
+	InitSetting,
 } from './views'
 
 const Routers = ({ hirstory }) => {
@@ -30,6 +31,7 @@ const Routers = ({ hirstory }) => {
 								<Route path="/module/return/ticket" component={ReturnTickets} />
 								<Route path="/module/file/init" component={InitFile} />
 								<Route path="/module/video/type" component={VideoType} />
+								<Route path="/module/initSetting" component={InitSetting} history={history} />
 								<Route path="*" component={NotFound} />
 							</Switch>
 						</App>

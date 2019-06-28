@@ -55,11 +55,11 @@ class CreateFile extends Component {
   // 扫描注入
   handleInit = (e) => {
     const { disk, diskName } = this.state
-    if (diskName === "default") {
-      message.warn("文件夹别名不能为空")
-      return
-    }
-    api.post("/disk/init", { path: disk, diskName })
+    // if (diskName === "default") {
+    //   message.warn("文件夹别名不能为空")
+    //   return
+    // }
+    api.post("/hiVideo/init", { path: disk })
       .then((value) => {
         message.info("操作成功")
         // console.log(value)
@@ -85,12 +85,13 @@ class CreateFile extends Component {
       .catch(err)
   }
 
-  // 创建文件夹别名
+  // 创建盘符
   handleOk = () => {
     const { newDisk } = this.state
     this.setState({
       visible: false,
-      newDisk: '',
+      newDiskName: '',
+      newDiskCode: '',
     });
     api.post("/disk", { diskName: newDisk })
       .then((value) => {
@@ -105,13 +106,17 @@ class CreateFile extends Component {
       visible: false,
     });
   }
-  // 新建盘符
-  handleCreate = (e) => {
-    this.setState({ newDisk: e.target.value })
+  // 新建盘符名称
+  handleCreateDiskName = (e) => {
+    this.setState({ newDiskName: e.target.value })
+  }
+  // 新建盘符code
+  handleCreateDiskCode = (e) => {
+    this.setState({ newDiskCode: e.target.value })
   }
 
   render() {
-    const { disk, diskNames, diskName, visible, newDisk, pathInfo } = this.state
+    const { disk, diskNames, diskName, visible, newDiskName, newDiskCode, pathInfo } = this.state
 
     const loop = data => data.map((item) => {
       if (item.child && item.child.length) {
@@ -132,12 +137,13 @@ class CreateFile extends Component {
         <Tree>
           {loop(this.state.directory)}
         </Tree>
-        <Modal title="创建文件夹别名"
+        <Modal title="创建盘符"
           visible={visible}
           onOk={this.handleOk}
           onCancel={this.handleCancel}
         >
-          <Input value={newDisk} placeholder="别名" onChange={this.handleCreate} />
+          <Input value={newDiskCode} placeholder="code" onChange={this.handleCreateDiskName} />
+          <Input value={newDiskName} placeholder="别名" onChange={this.handleCreateDiskCode} />
         </Modal>
         <Card
           title="扫描文件"
@@ -151,7 +157,7 @@ class CreateFile extends Component {
                     <Option value={v.disk_name} key={v.id}>{v.disk_name}</Option>
                   )
                 })}
-                <Option value="default">选择文件夹</Option>
+                <Option value="default">选择盘符</Option>
               </Select>
               <Button type="primary" shape="circle" icon="plus" size="large" style={{ marginLeft: 24, marginRight: 24 }} onClick={this.handleShow} />
               <Button type="primary" size="large" onClick={this.handleInit} >初始化</Button>

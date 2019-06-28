@@ -13,9 +13,9 @@ export const project = {
 /**
  * api请求信息
  */
-const devHost = "http://localhost:8080/hi-video"
+const devHost = "http://localhost:8888"
 const prodHost = "http://localhost:8081"
-const devBaseURL = devHost + '/api/b/v1.0/'
+const devBaseURL = devHost + '/'
 const prodBaseURL = prodHost + "/api/b/v1.0/"
 export const api = {
   devBaseURL,

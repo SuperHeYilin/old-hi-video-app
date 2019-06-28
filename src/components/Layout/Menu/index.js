@@ -13,6 +13,7 @@ const data = [
   {"key": 4, "title": "类别", "icon": "line-chart", "color": "yellow", "background": "#ec407a", "link": "/module/video/type"},
   {"key": 5, "title": "重复验证", "icon": "setting", "color": "pink2", "background": "#fb8c00", "link": "/module/video/type"},
   {"key": 6, "title": "导入数据", "icon": "download", "color": "purple", "background": "#9963E5", "link": "/module/file/init"},
+  {"key": 7, "title": "基础配置", "icon": "setting", "color": "pink", "background": "#ec407a", "link": "/module/initSetting"},
 ]
 
 class MeunFigureCard extends React.Component {

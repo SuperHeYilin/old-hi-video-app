@@ -10,12 +10,12 @@ class Img extends Component {
     const { src, alt, height, width, borderRadius = "", defaultSrc = defaultS } = this.props
     return (
       <div>
-        <img src={src ? "http://localhost:8080/images/" + src : defaultSrc}
+        {/* <img src={src ? "http://localhost:8080/images/" + src : defaultSrc}
           ref={img => this.img = img}
           alt={alt}
           style={{ height, width, borderRadius }}
           onError={() => this.img.src = defaultSrc}
-        />
+        /> */}
       </div>
     );
   }
