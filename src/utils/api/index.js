@@ -71,6 +71,7 @@ const msgErr = (text) => {
 }
 
 const err = (err) => {
+  console.log(err)
   message.destroy()
   printLog(err)
   if (err.response) {

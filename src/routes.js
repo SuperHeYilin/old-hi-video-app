@@ -5,7 +5,6 @@ import AuthRoute from './views/AuthRoute'
 import {
   App,
   Login,
-  NotAuth,
   NotFound,
   VideoInfo,
   GetTickets,
@@ -14,6 +13,7 @@ import {
 	VideoType,
 	VideoDetail,
 	InitSetting,
+	VideoRepeat,
 } from './views'
 
 const Routers = ({ hirstory }) => {
@@ -31,6 +31,7 @@ const Routers = ({ hirstory }) => {
 								<Route path="/module/return/ticket" component={ReturnTickets} />
 								<Route path="/module/file/init" component={InitFile} />
 								<Route path="/module/video/type" component={VideoType} />
+								<Route path="/module/video/repeat" component={VideoRepeat} />
 								<Route path="/module/initSetting" component={InitSetting} history={history} />
 								<Route path="*" component={NotFound} />
 							</Switch>

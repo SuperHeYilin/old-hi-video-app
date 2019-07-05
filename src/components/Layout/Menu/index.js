@@ -1,7 +1,6 @@
 import React from 'react'
 import classnames from 'classnames'
 import { Menu, Icon } from 'antd'
-import CountUp from 'react-countup'
 import styles from './index.less'
 
 const MenuItem = Menu.Item
@@ -11,7 +10,7 @@ const data = [
   {"key": 2, "title": "排名", "icon": "download", "color": "pink", "background": "#ec407a", "link": "/module/get/ticket"},
   {"key": 3, "title": "人物", "icon": "reload", "color": "blue", "background": "#26c6da", "link": "/module/return/ticket"},
   {"key": 4, "title": "类别", "icon": "line-chart", "color": "yellow", "background": "#ec407a", "link": "/module/video/type"},
-  {"key": 5, "title": "重复验证", "icon": "setting", "color": "pink2", "background": "#fb8c00", "link": "/module/video/type"},
+  {"key": 5, "title": "重复验证", "icon": "setting", "color": "pink2", "background": "#fb8c00", "link": "/module/video/repeat"},
   {"key": 6, "title": "导入数据", "icon": "download", "color": "purple", "background": "#9963E5", "link": "/module/file/init"},
   {"key": 7, "title": "基础配置", "icon": "setting", "color": "pink", "background": "#ec407a", "link": "/module/initSetting"},
 ]
