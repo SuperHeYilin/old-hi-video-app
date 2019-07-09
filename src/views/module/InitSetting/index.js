@@ -5,6 +5,7 @@ import Disk from './disk'
 import Search from './search'
 import Video from './video'
 import BaseSetting from './baseSetting'
+import DirSetting from './dirSetting'
 
 const { SubMenu } = Menu;
 
@@ -42,6 +43,10 @@ export default class InitSetting extends Component {
               <Icon type="inbox" />
               <span>基础配置</span>
             </Menu.Item>
+            <Menu.Item key="dirSetting">
+              <Icon type="inbox" />
+              <span>目录配置</span>
+            </Menu.Item>
             <SubMenu
               key="sub1"
               title={
@@ -75,12 +80,13 @@ export default class InitSetting extends Component {
           </Menu>
         </div>
 
-        <div style={{ marginLeft: 24 }}>
+        <div style={{ marginLeft: 24, float: "left" }}>
           <Switch>
             <Route path="/module/initSetting/disk" component={Disk} />
             <Route path="/module/initSetting/search" component={Search} />
             <Route path="/module/initSetting/video" component={Video} />
             <Route path="/module/initSetting/baseSetting" component={BaseSetting} />
+            <Route path="/module/initSetting/dirSetting" component={DirSetting} />
           </Switch>
         </div>
       </div>
