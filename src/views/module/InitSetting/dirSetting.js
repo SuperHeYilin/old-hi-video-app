@@ -3,53 +3,8 @@ import { Tree, Icon, Layout, Row, Col, Button } from 'antd';
 import { Layer, Ibox } from '../../../components/Ui'
 import { api, err } from '../../../utils'
 
-
 const { TreeNode, DirectoryTree } = Tree;
 const { Header, Footer, Sider, Content } = Layout;
-
-const treeData = [
-    {
-        title: '0-0',
-        key: '0-0',
-        children: [
-            {
-                title: '0-0-0',
-                key: '0-0-0',
-                children: [
-                    { title: '0-0-0-0', key: '0-0-0-0' },
-                    { title: '0-0-0-1', key: '0-0-0-1' },
-                    { title: '0-0-0-2', key: '0-0-0-2' },
-                ],
-            },
-            {
-                title: '0-0-1',
-                key: '0-0-1',
-                children: [
-                    { title: '0-0-1-0', key: '0-0-1-0' },
-                    { title: '0-0-1-1', key: '0-0-1-1' },
-                    { title: '0-0-1-2', key: '0-0-1-2' },
-                ],
-            },
-            {
-                title: '0-0-2',
-                key: '0-0-2',
-            },
-        ],
-    },
-    {
-        title: '0-1',
-        key: '0-1',
-        children: [
-            { title: '0-1-0-0', key: '0-1-0-0' },
-            { title: '0-1-0-1', key: '0-1-0-1' },
-            { title: '0-1-0-2', key: '0-1-0-2' },
-        ],
-    },
-    {
-        title: '0-2',
-        key: '0-2',
-    },
-];
 
 export default class DirSetting extends Component {
     constructor(props) {
@@ -57,7 +12,7 @@ export default class DirSetting extends Component {
 
         this.state = {
             trees: [],
-            expandedKeys: ['0-0-0', '0-0-1'],
+            expandedKeys: [],
             autoExpandParent: true,
             checkedKeys: ['0-0-0'],
             selectedKeys: [],
@@ -66,11 +21,23 @@ export default class DirSetting extends Component {
     componentDidMount() {
         this.fetch()
     }
-    onExpand = expandedKeys => {
-        console.log('onExpand', expandedKeys);
+    onExpand = (expandedKeys, obj) => {
+        console.log('onExpand', expandedKeys, 'obj', obj.node.props.eventKey);
+        const dirId = obj.node.props.eventKey
         // if not set autoExpandParent to false, if children expanded, parent can not collapse.
         // or, you can remove all expanded children keys.
-        this.fetch2(expandedKeys)
+
+        const { trees } = this.state
+        api
+            .get("/fileDirectory/pId/" + dirId)
+            .then((data) => {
+                console.log('请求数据：', data.data)
+                this.handlePushValue(dirId, data.data, trees)
+                console.log('拼接玩数据', trees)
+                this.setState({ trees })
+            })
+
+        // this.fetch2(dirId)
         this.setState({
             expandedKeys,
             autoExpandParent: false,
@@ -86,6 +53,39 @@ export default class DirSetting extends Component {
         console.log('onSelect', info);
         this.setState({ selectedKeys });
     };
+    fetch2 = (id) => {
+        const { trees } = this.state
+        api
+            .get("/fileDirectory/pId/" + id)
+            .then((data) => {
+                console.log(data.data)
+            })
+    }
+    fetch = () => {
+        api
+            .get("/fileDirectory/pId/" + 0)
+            .then((data) => {
+                console.log(data.data)
+                this.setState({ trees: data.data })
+            })
+    }
+
+    handlePushValue = (id, arrays, oldValue) => {
+        for (let i = 0; i < oldValue.length; i++) {
+            console.log('找', id, '对比', oldValue[i].id)
+            if (oldValue[i].fileDirectories) {
+                this.handlePushValue(id, arrays, oldValue[i].fileDirectories)
+            }
+            if (oldValue[i].id == id) {
+                console.log('找到了', id)
+                oldValue[i].fileDirectories = arrays
+            } else {
+                console.log('继续找', id)
+                this.handlePushValue(id, arrays, oldValue[i])
+            }
+
+        }
+    }
 
     renderTreeNodes = data =>
         data.map(item => {
@@ -98,28 +98,9 @@ export default class DirSetting extends Component {
             }
             return <TreeNode title={item.directoryName} key={item.id} dataRef={item} />;
         });
-        fetch2 = (id) => {
-            const { trees } = this.state
-            api
-                .get("/fileDirectory/pId/" + id)
-                .then((data) => {
-                    
-                })
-            }
-
-    
-            
-    fetch = () => {
-        api
-            .get("/fileDirectory/pId/" + 0)
-            .then((data) => {
-                console.log(data.data)
-                this.setState({ trees: data.data })
-            })
-    }
 
     render() {
-        const { trees } = this.state
+        const { trees, expandedKeys } = this.state
         return (
             <div>
                 <Layout>
@@ -135,7 +116,7 @@ export default class DirSetting extends Component {
                                 </Row>
                             </Ibox.IboxTitle>
                             <Ibox.IboxContent>
-                                <DirectoryTree multiple defaultExpandAll onSelect={this.onSelect} onExpand={this.onExpand}>
+                                <DirectoryTree expandedKeys={expandedKeys} multiple defaultExpandAll onSelect={this.onSelect} onExpand={this.onExpand}>
                                     {this.renderTreeNodes(trees)}
                                     {/* <TreeNode title="parent 0" key="0-0">
                                         <TreeNode title="leaf 0-0" key="0-0-0" isLeaf />
