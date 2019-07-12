@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Layout, Row, Col, Button, Table, Divider, Modal, Input, message } from 'antd'
+import { Layout, Row, Col, Button, Table, Divider, Modal, Input, message, notification } from 'antd'
 import { Ibox } from '../../../components/Ui'
 import { api, err as apierr } from '../../../utils'
 
@@ -18,9 +18,49 @@ export default class Disk extends Component {
             id: 0,
         }
     }
+
     componentDidMount() {
+        this.openWebSocket()
         this.fetch()
     }
+
+    handlePushMessage = (message) => {
+        notification['info']({
+            message: '消息提示',
+            description: message,
+          });
+    }
+    openWebSocket = () => {
+        let ws
+        let websocket;
+        let wsStatus = false;
+        // 判断当前浏览器是否支持WebSocket
+        if ('WebSocket' in window) {
+            ws = new WebSocket("ws://localhost:8888/websocket/sb");
+        } else if ('MozWebSocket' in window) {
+            // websocket = new MozWebSocket("ws://localhost:8888/websocket/sb");
+        } else {
+            ws = new SockJS("http://localhost:8888/websocket/sb");
+        }
+        // 这个事件是接受后端传过来的数据
+        ws.onmessage = (event) => {
+            // 根据业务逻辑解析数据
+            console.log("Server:");
+            console.log(event);
+            this.handlePushMessage(event.data)
+        };
+        ws.onclose = (event) => {
+            console.log("Connection closed!");
+        };
+        ws.onopen = (event) => {
+            wsStatus = true;
+            console.log("Connected!");
+        };
+        ws.onerror = (event) => {
+            console.log("Connect error!");
+        };
+    }
+
     fetch() {
         api
             .get("/fileDisk/findAll")
