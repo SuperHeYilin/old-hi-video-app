@@ -52,7 +52,7 @@ export default class InitSetting extends Component {
               title={
                 <span>
                   <Icon type="mail" />
-                  <span>Navigation One</span>
+                  <span>其他1</span>
                 </span>
               }
             >
@@ -66,7 +66,7 @@ export default class InitSetting extends Component {
               title={
                 <span>
                   <Icon type="appstore" />
-                  <span>Navigation Two</span>
+                  <span>其他2</span>
                 </span>
               }
             >
@@ -80,7 +80,7 @@ export default class InitSetting extends Component {
           </Menu>
         </div>
 
-        <div style={{ marginLeft: 24, float: "left" }}>
+        <div style={{ marginLeft: 24, float: "left", width: '80%' }}>
           <Switch>
             <Route path="/module/initSetting/disk" component={Disk} />
             <Route path="/module/initSetting/search" component={Search} />

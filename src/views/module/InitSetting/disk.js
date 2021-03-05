@@ -171,7 +171,7 @@ export default class Disk extends Component {
                 key: 'realPath',
             },
             {
-                title: 'Action',
+                title: '操作',
                 key: 'action',
                 render: (text, record) => (
                     <span>
