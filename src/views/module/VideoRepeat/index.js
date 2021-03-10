@@ -46,13 +46,13 @@ function RepeatImp(props) {
             <div key={item.id} className={styles.card} >
               <div className={styles.left}>
                 {/* <img alt="example" src="https://gw.alipayobjects.com/zos/rmsportal/JiqGstEfoWAOHiTxclqi.png" /> */}
-                <img alt="example" src={require(`../../../public/imgs/1920-1080.jpg`)} />
+                <img alt="example" src={require(`../../../public/imgs/1920-1080-0.jpg`)} />
               </div>
               <div className={styles.left}>
                 <h3>{item.fileName}</h3>
                 <h5>{item.path}</h5>
-                <h5>{item.size_b}mb</h5>
-                <p>dfjdklfjsdlfdslkfjsdlfjlsdfkj;ldskjfsdlkfjasd;lfkjas;ldfasdfkljdsfjdsf;lakjdfa;lsdkfj</p>
+                <h5>{item.sizeMb} mb</h5>
+                {/* <span>dfjdklfjsdlfdslkfjsdlfjlsdfkj;ldskjfsdlkfjasd;lfkjas;ldfasdfkljdsfjdsf;lakjdfa;lsdkfj</span> */}
                 <div style={{ marginTop: 38 }}>
                   <Button type="primary">播放</Button>
                   <Button style={{ marginLeft: 24 }}>打开文件位置</Button>
@@ -81,11 +81,11 @@ export default class VideoRepeat extends Component {
       deleteItem: [], // 删除名称集合
       visible: false,
       pagination: {},
-      sort: 'esc', // 排序规则
+      orderType: 'desc', // 排序规则
     }
   }
   componentDidMount = () => {
-    // this.fetch()
+    this.fetch()
   }
   // 字符串超长截取
   handleChangeString = (value) => {
@@ -185,13 +185,14 @@ export default class VideoRepeat extends Component {
 
   // 切换排序规则
   handleSortChange = e => {
-    this.setState({ sort: e.target.value });
+    this.setState({ orderType: e.target.value });
   };
 
 
   fetch = (current) => {
     const { pageSize = 10 } = this.state.pagination
-    api.get("/hiVideo/getRepeat", { start: current, length: pageSize })
+    const { orderType } = this.state
+    api.get("/hiVideo/getRepeat", { start: current, length: pageSize, orderType })
       .then((value) => {
         const pagination = { ...this.state.pagination };
         pagination.total = value.data.total;
@@ -200,7 +201,7 @@ export default class VideoRepeat extends Component {
           pagination,
         })
       })
-    api.get("/hiVideo/getFirstRepeat")
+    api.get("/hiVideo/getFirstRepeat", { orderType })
       .then((value) => {
         this.setState({
           firstRepeat: value.data,
@@ -208,7 +209,7 @@ export default class VideoRepeat extends Component {
       })
   }
   render() {
-    const { allRepeat, firstRepeat, visible, deleteItem, pagination, sort } = this.state
+    const { allRepeat, firstRepeat, visible, deleteItem, pagination, orderType } = this.state
     const columns = [{
       title: '文件名',
       dataIndex: 'fileName',
@@ -255,7 +256,7 @@ export default class VideoRepeat extends Component {
           title="重复验证"
           extra={
             <div>
-              <Radio.Group value={sort} onChange={this.handleSortChange}>
+              <Radio.Group value={orderType} onChange={this.handleSortChange}>
                 <Radio.Button value="esc">顺序</Radio.Button>
                 <Radio.Button value="desc">倒序</Radio.Button>
                 <Radio.Button value="rand">随机</Radio.Button>

@@ -15,16 +15,19 @@ class VideoDetail extends Component {
   constructor(props) {
     super(props)
     const { match } = this.props
-    const { id = 0 } = match.params
+    // const { id = 0 } = match.params
+    const id = 1431
     this.state = {
       id,
       data: {}, // 视频简介
       imgData: [], // 视频图片信息
-      videoKey: [], // 视频名称关键字建议
+      videoKey: ['.'], // 视频名称关键字建议
       selectedTags: [], // 选中关键字
       inputValue: "", // 提交关键字
       visible: false, // 模态框
       modalIMg: "", // 模态框图片地址
+      videoImgs: [], // 视频图片
+      imgIndex: 0, // 图片下标 放大查看保证顺序
     }
   }
   componentDidMount = () => {
@@ -32,14 +35,27 @@ class VideoDetail extends Component {
   }
 
   // 添加图片
-  handleAddImg = () => {
+  handleAddImg = (imgType) => {
     const { id } = this.state
-    api.post("/video/addron", { id })
+    api.post("/hiVideo/generateImg", { id, count: 2, imgType })
       .then((result) => {
-        message.success("正在获取，请赖心等待！")
+        // message.success("正在获取，请赖心等待！")
+        this.fetch()
       })
       .catch(err)
   }
+
+  // 删除图片
+  handleDeleteIMg = (id) => {
+    console.log('删除图片', id)
+    api.post("/hiVideoImg/delete", { id })
+      .then((result) => {
+        this.fetch()
+      })
+      .catch(err)
+  }
+  
+
   // 输入框事件
   handleInputChange = (e) => {
     this.setState({ inputValue: e.target.value})
@@ -55,19 +71,51 @@ class VideoDetail extends Component {
   }
 
   // 查看图片
-  handleLook = (src) => {
+  handleLook = (src, key) => {
     this.setState({
       visible: true,
       modalIMg: src,
+      imgIndex: key,
     })
   }
 
+  changeImg = (type) => {
+    let { imgIndex, videoImgs } = this.state
+    
+    if (type == 'up') {
+      if (imgIndex - 1 < 0) {
+        imgIndex = videoImgs.length - 1
+      } else {
+        imgIndex = imgIndex - 1
+      }
+    } else {
+      if (imgIndex + 1 >= videoImgs.length) {
+        imgIndex = 0
+      } else {
+        imgIndex = imgIndex + 1
+      }
+    }
+
+    console.log(imgIndex, videoImgs)
+
+    this.setState({
+      imgIndex,
+      modalIMg: videoImgs[imgIndex].videoSizeB + "/" + videoImgs[imgIndex].imgPath
+    })
+
+  }
+  
+
   fetch = () => {
     const { id } = this.state
-    api.get("/video", { id })
+    api.get("/hiVideo/get", { id })
       .then((result) => {
         console.log(result)
-        this.setState({ data: result.videoInfo, videoKey: result.videoKey })
+        this.setState({
+          data: result.data,
+          videoKey: [...result.data.adviseWorlds, '.'],
+          videoImgs: result.data.videoImgs,
+        })
       })
       .catch(err)
   }
@@ -91,13 +139,13 @@ class VideoDetail extends Component {
   }
 
   render() {
-    const { data, imgData, videoKey, selectedTags, inputValue, modalIMg } = this.state
+    const { data, videoImgs, videoKey, selectedTags, inputValue, modalIMg } = this.state
     return (
       <div className={styles.video}>
-        <div className={styles.titleName}>{data.file_name}</div>
+        <div className={styles.titleName}>{data.fileName}</div>
         <div className={styles.content}>
           <div className={styles.left}>
-            <Img alt={`${data.file_name}`} src={data.img_path} width="100%" />
+            <Img alt={`${data.fileName}`} src={data.imgPath} width="100%" />
           </div>
           <div className={styles.right}>
             <p>
@@ -110,7 +158,11 @@ class VideoDetail extends Component {
             </p>
             <p>
               <span className={styles.weight}>文件大小:</span>
-              <span>{data.size_mb} MB</span>
+              <span>{data.sizeMb} MB</span>
+            </p>
+            <p>
+              <span className={styles.weight}>文件大小b:</span>
+              <span>{data.sizeB} B</span>
             </p>
             <p className={styles.weight}>
               路径:
@@ -122,7 +174,7 @@ class VideoDetail extends Component {
               类别:
             </p>
             <div>
-              123123
+              {data.videoType}
             </div>
           </div>
         </div>
@@ -132,16 +184,19 @@ class VideoDetail extends Component {
           onOk={this.handleOk}
           onCancel={this.handleCancel}
           width="1000px"
-        >
+        > 
+          <div style={{ width: '10%', height: '100%', hover: 'background black' }}>123</div>
           <Img alt={`${modalIMg}`} src={modalIMg} width="100%" />
-          <Button.Group>
-            <Button type="primary">
+          {/* <Button.Group> */}
+            <div style={{ marginTop: 24 }}>
+            <Button type="primary" onClick={() => this.changeImg('up')} style={{ width: '48%', height: 40 }}> 
               <Icon type="left" />
             </Button>
-            <Button type="primary">
+            <Button type="primary" onClick={() => this.changeImg('down')} style={{ marginLeft: '4%', width: '48%', height: 40 }}>
               <Icon type="right" />
             </Button>
-          </Button.Group>
+            </div>
+          {/* </Button.Group> */}
         </Modal>
         <Card>
           <div>
@@ -155,8 +210,8 @@ class VideoDetail extends Component {
 
         <Card>
           <div>
-            <div style={{ float: "left"}}>
-              <h4 style={{ marginRight: 8, display: 'inline' }}>名称建议:</h4>
+            <div style={{ float: "left", marginBottom:24,}}>
+              <h4 style={{ marginRight: 8,  display: 'inline' }}>名称建议:</h4>
               {videoKey.map(tag => (
                 <CheckableTag
                   key={tag}
@@ -167,7 +222,8 @@ class VideoDetail extends Component {
                 </CheckableTag>
               ))}
             </div>
-            <div style={{ marginLeft: 24, float: "left"}}>
+            {/* <div style={{ marginLeft: 24, float: "left"}}> */}
+            <div style={{ marginTop: 24 }}>
               <Search value={inputValue} onChange={this.handleInputChange} enterButton="确认更改" onSearch={this.handleChangeName} />
             </div>
           </div>
@@ -175,43 +231,44 @@ class VideoDetail extends Component {
         <Card
           title="样品图片"
           extra={
-            <Button type="primary" onClick={this.handleAddImg} >
-              添加图片
-            </Button>
+            <div>
+              <Button type="primary" shape="circle" icon="picture" onClick={() => this.handleAddImg('jpeg')} />
+              <Button type="primary" shape="circle" icon="youtube" onClick={() => this.handleAddImg('gif')} style={{ marginLeft: 8 }} />
+            </div>
+            
           }
         >
           <Row gutter={12} >
             <div style={{ marginTop: 36 }}>
                 {
-                  imgData.map((value, key) => {
-                    let imgName
+                  videoImgs.map((value, key) => {
+                    let imgPath
                     if (value) {
-                      imgName = value.imgName
+                      imgPath = value.videoSizeB + "/" + value.imgPath
                     } else {
-                      imgName = ""
+                      imgPath = ""
                     }
-                    // console.log(imgName)
                     return (
                       <Col xs={12} sm={8} md={6} lg={6} xl={6} key={key}>
                         <Card
                           hoverable
                           // style={{ width: 240 }}
                           cover={
-                            <div style={{ textAlign: "center" }}>
-                              <Img alt="t" src={imgName} defaultSrc={defaultImg} width="100%" />
+                            <div style={{ textAlign: "center" }} onClick={() => this.handleLook(imgPath, key)}>
+                              <Img alt="t" src={imgPath} defaultSrc={defaultImg} width="100%" />
                             </div>
                           }
                         >
-                          <div style={{ textAlign: "center" }}>
+                          <div style={{ textAlign: "center", margin: -10 }}>
                             <Button.Group>
-                              <Button type="primary">
-                                <Icon type="retweet" />封面
+                              <Button type="primary" >
+                                <Icon type="upload" />
                               </Button>
-                              <Button type="primary" onClick={() => this.handleLook(imgName)} >
-                                查看
+                              <Button type="primary"  onClick={() => this.handleLook(imgPath, key)} >
+                                <Icon type="eye" />
                               </Button>
-                              <Button type="primary">
-                                删除<Icon type="close" />
+                              <Button type="primary" onClick={() => this.handleDeleteIMg(value.id)}>
+                                <Icon type="close" />
                               </Button>
                             </Button.Group>
                           </div>

@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "antd": "^3.1.0",
+    "antd": "^3.26.19",
     "axios": "^0.16.1",
     "classnames": "^2.2.5",
     "material-ui": "^0.20.0",

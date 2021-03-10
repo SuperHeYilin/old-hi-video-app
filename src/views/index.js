@@ -5,6 +5,8 @@ export { default as App } from './App.js'
 export { Login } from './Auth'
 // 视频信息列表
 export { default as VideoInfo } from './module/VideoInfo'
+// 视频pk
+export { default as VideoPK } from './module/VideoPK'
 // 视频详细
 export { default as VideoDetail } from './module/VideoDetail'
 // 取票

@@ -14,6 +14,7 @@ import {
 	VideoDetail,
 	InitSetting,
 	VideoRepeat,
+	VideoPK,
 } from './views'
 
 const Routers = ({ hirstory }) => {
@@ -27,6 +28,7 @@ const Routers = ({ hirstory }) => {
 							<Switch>
 								<Route path="/module/video/info" component={VideoInfo} />
 								<Route path="/module/video/detail/:id" component={VideoDetail} />
+								<Route path="/module/video/pk" component={VideoPK} />
 								<Route path="/module/get/ticket" component={GetTickets} />
 								<Route path="/module/return/ticket" component={ReturnTickets} />
 								<Route path="/module/file/init" component={InitFile} />

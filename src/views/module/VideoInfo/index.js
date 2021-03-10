@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
-import { Row, Col, Input, Icon, Card, Button, Avatar, message, Pagination } from 'antd'
+import { Row, Col, Input, Icon, Card, Button, Avatar, message, Pagination, Modal } from 'antd'
 import { api, err } from '../../../utils'
 import Img from '../ImgUtil'
 
-const defaultAvg = require('../../../public/imgs/av.png')
+const defaultAvg = require('../../../public/imgs/1920-1080-1.jpg')
 
 const { Meta } = Card
 
@@ -17,32 +17,55 @@ class VideoInfo extends Component {
       current: 1, // 当前页
       totalCount: 0, // 总条数
       pageSize: 24, // 每页数量
+      visible: false, // 图片模态框
+      modalIMg: '', // 模态框图片链接
     }
   }
   componentDidMount() {
-    const { current, keyWord } = this.state
-    this.fetch(current, keyWord)
+    const { current, pageSize, keyWord } = this.state
+    this.fetch(current, pageSize, keyWord)
   }
   // 分页
   onChange = (page) => {
-    const { keyWord } = this.state
-    this.fetch(page, keyWord)
+    const { keyWord, pageSize } = this.state
+    this.fetch(page, pageSize, keyWord)
     this.setState({
       current: page,
       // pageData: data.slice((page - 1) * pageSize, page * pageSize),
     })
   }
-  fetch = (currPage, keyWord) => {
-    api.get("ticket/product", { pageNumber: currPage, keyWord })
+  fetch = (currPage, length, keyWord) => {
+    window.scrollTo(0, 0)
+    api.get("hiVideo/getPageAll", { start: currPage, length, keyWord })
       .then((value) => {
+        console.log('fetch', value)
         this.setState({
           // current: value.totalPage,
-          totalCount: value.totalRow,
-          pageData: value.list,
+          totalCount: value.data.total,
+          pageData: value.data.rows
          })
       })
       .catch(err)
   }
+
+  // 查看图片
+  handleLook = (src) => {
+    this.setState({
+      visible: true,
+      modalIMg: src,
+    })
+  }
+  handleOk = (e) => {
+    this.setState({
+      visible: false,
+    });
+  }
+  handleCancel = (e) => {
+    this.setState({
+      visible: false,
+    });
+  }
+
   // 播放
   play = (id) => {
     api.get("/video/play", { id })
@@ -84,6 +107,23 @@ class VideoInfo extends Component {
 
     return (
       <div>
+        {/* <Modal
+          title="图片预览"
+          visible={this.state.visible}
+          onOk={this.handleOk}
+          onCancel={this.handleCancel}
+          width="1000px"
+        >
+          <Img alt={`${modalIMg}`} src={modalIMg} width="100%" />
+          <Button.Group>
+            <Button type="primary">
+              <Icon type="left" />
+            </Button>
+            <Button type="primary">
+              <Icon type="right" />
+            </Button>
+          </Button.Group>
+        </Modal> */}
         <Card>
           <Row>
             <Col xs={24} sm={10} md={10} lg={10} xl={10} style={{ marginTop: 16 }} >
@@ -124,10 +164,12 @@ class VideoInfo extends Component {
                     cover={
                       <Img
                         alt="example"
-                        src={v.imgPath}
+                        // src={v.imgPath}
+                        src = {`${require("../../../public/imgs/1920-1080-" + Math.floor((Math.random() * 1) + 1) +".jpg")}`}
                         // height="168.5px"
                         width="100%"
-                        defaultSrc={`${require("../../../public/imgs/default" + Math.floor((Math.random() * 3) + 1) +".jpg")}`}
+                        // defaultSrc={`${require("../../../public/imgs/1920-1080-" + Math.floor((Math.random() * 2) + 1) +".jpg")}`}
+                        defaultSrc={`${require("../../../public/imgs/1920-1080-" + Math.floor((Math.random() * 1) + 1) +".jpg")}`}
                         onClick={() => this.videoInfo(v.id)}
                       />
                           }
@@ -145,13 +187,13 @@ class VideoInfo extends Component {
                         <div>
                           <p>
                             <span style={{ color: "#20B648", fontWeight: 400}}>{v.score || 0}分</span>
-                            <span style={{ color: "#1890FF", fontWeight: 400, marginLeft: 24 }}>{v.size_mb}mb</span>
+                            <span style={{ color: "#1890FF", fontWeight: 400, marginLeft: 24 }}>{v.sizeMb}mb</span>
                           </p>
                         </div>
                       }
                       description={
                         <div style={{overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
-                          <span>{v.file_name}</span>
+                          <span>{v.fileName}</span>
                         </div>
                       }
                     />

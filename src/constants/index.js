@@ -13,7 +13,7 @@ export const project = {
 /**
  * api请求信息
  */
-const devHost = "http://localhost:8888"
+const devHost = "http://localhost:8762"
 const prodHost = "http://localhost:8081"
 const devBaseURL = devHost + '/'
 const prodBaseURL = prodHost + "/api/b/v1.0/"
